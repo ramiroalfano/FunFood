@@ -1,0 +1,17 @@
+.credits-card {  
+    width: 80%;                              /* Ancho de la tarjeta */  
+    margin: 0 auto;                         /* Centrar la tarjeta */  
+    border: 1px solid #ccc;                 /* Borde alrededor de la tarjeta */  
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */  
+}  
+.button-container {  
+    width: 80%; /* Establece el ancho al 80% */  
+    margin: 0 auto; /* Centra el contenedor */  
+    display: flex; /* Utiliza flexbox para alinear los botones */  
+    justify-content: space-around; /* Espaciado equidistante entre botones */  
+}  
+
+.button {  
+    flex: 1; /* Permite que cada botón ocupe el mismo espacio */  
+    margin: 0 10px; /* Margen lateral entre botones */  
+}  

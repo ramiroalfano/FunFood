@@ -1,0 +1,39 @@
+.shopping-cart {  
+    padding: 20px;  
+    border: 1px solid #ccc;  
+    border-radius: 10px;  
+    width: 60%;  
+    margin: 20px auto;  
+    text-align: center;
+    align-items: center;  
+}  
+.credit-selector {  
+    margin-bottom: 20px;  
+}  
+
+select {  
+    padding: 10px;  
+    margin-right: 10px;  
+}  
+
+button {  
+    padding: 10px 15px;  
+    border: none;  
+    border-radius: 5px;  
+    background-color: #e89442;  
+    color: white;  
+    cursor: pointer;  
+    transition: background-color 0.3s;  
+}  
+
+button:hover {  
+    background-color: #e55342;  
+}  
+
+button[style] {  
+    cursor: pointer;  
+    background: none;  
+    color: red;  
+    font-size: 1.5rem;  
+    padding: 0;  
+} 

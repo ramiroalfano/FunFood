@@ -1,0 +1,93 @@
+.formContainer {  
+    border: #fff;  
+    width: 75%;  
+    margin: 3rem auto;  
+    padding: 1.5rem 1rem;  
+    border-radius: 0.5rem;  
+    box-shadow: 3px 3px 5px 0px rgb(0 0 0 / 29%);  
+}  
+
+.formContainer__title {  
+    color: #000000;  
+    font-size: 1.5rem;  
+    margin: 1.5rem;  
+    text-align: center;  
+}  
+
+.form {  
+    text-align: center;  
+}  
+
+.form__label {  
+    display: inline-block;  
+    width: 60%; /* Mantener ancho fijo de las etiquetas */  
+    color: #000000;  
+    text-align: left;  
+    font-weight: 600;  
+}  
+
+.form__input, .form__textarea {  
+    width: 60%;  
+    margin: 0.5rem;  
+    padding: 0.5rem;  
+    background-color: #ffffff;  
+    color: #000000;  
+    border: none;  
+    border-bottom: solid 1px #e47c1c;  
+    font-family: Arial, Helvetica, sans-serif;  
+    font-size: 1rem;  
+}  
+
+.form__textarea {  
+    height: 5rem;  
+    resize: none;  
+}  
+
+.form__input:focus, .form__textarea:focus {  
+    outline: none;  
+}  
+
+.form__input--submit {  
+    width: 100%;  
+    background-color: #e47c1c;  
+    margin-top: 1.5rem;  
+    border-radius: 0.3rem;  
+    font-weight: 600;  
+    transition: ease-in;  
+    z-index: 1;  
+    cursor: pointer;  
+}  
+
+.form__input--submit:hover {  
+    background-color: #e89442;  
+    box-shadow: 0 5px #666;  
+    transform: translateY(4px);  
+}  
+
+/* Cambios para el botón de eliminar */  
+.form-header {  
+    display: flex; /* Usamos flexbox */  
+    justify-content: space-between; /* Espacia el contenido */  
+    align-items: center; /* Alinea verticalmente el botón y el título */  
+}  
+
+.removeButton {  
+    width: 10%;
+    background: none;  
+    border: none;  
+    color: red;  
+    font-size: 1.5rem;  
+    cursor: pointer;  
+    transition: color 0.3s ease;  
+}  
+
+.removeButton:hover {  
+    color: darkred; /* Cambia el color al pasar el mouse */  
+}  
+
+/* Opcional: Personalizar el título del formulario */  
+.form-title {  
+    margin: 0; /* Eliminar margen superior/abajo */  
+    font-size: 1.2rem; /* Ajustar tamaño del título del formulario */  
+    flex-grow: 1; /* Permitir que el título crezca para ocupar el espacio disponible */  
+}  

@@ -1,0 +1,45 @@
+.calendario-container {  
+    display: flex;  
+    flex-direction: column;  
+    align-items: center;  
+    justify-content: center;  
+    gap: 30px; /* Espaciado entre las cards */  
+    margin: 20px;  
+}  
+
+.calendario-card {  
+    border: 2px solid #ccc;  
+    padding: 20px;  
+    border-radius: 10px;  
+    width: 80%;   /* La card ocupa el 80% del ancho */  
+    max-width: 400px; /* Limitamos el ancho máximo */  
+    text-align: center;  
+    cursor: pointer;  
+    transition: transform 0.2s, box-shadow 0.3s;  
+    margin: 10px 0; /* Espaciado entre cards */  
+    background-color: #ffffff; /* Fondo blanco */  
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */  
+}  
+
+.calendario-card.selected {  
+    border-color: #e89442;  
+    background-color: #ffe4e1;  
+    transform: scale(1.05);  
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más intensa al seleccionar */  
+}  
+
+button {   
+    width: 80%;  
+    margin-top: 20px;  
+    padding: 10px 20px;  
+    border: none;  
+    border-radius: 5px;  
+    background-color: #ff6347;  
+    color: white;  
+    cursor: pointer;  
+    transition: background-color 0.3s;  
+}  
+
+button:hover {  
+    background-color: #e55342;  
+}  
