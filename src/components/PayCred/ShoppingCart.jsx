@@ -1,12 +1,13 @@
 import React, { useState } from 'react';  
-import CreditSelector from './CreditSelector'; 
-import './Style.css';
+import CreditSelector from './CreditSelector';   
+import './Style.css';  
 
 const ShoppingCart = () => {  
     const [cart, setCart] = useState([]);  
 
-    const handleAddToCart = (credits) => {  
-        setCart([...cart, credits]);  
+    const handleAddToCart = (selectedCredit) => {  
+        // Almacena la cantidad de créditos junto con su precio  
+        setCart([...cart, selectedCredit]);  
     };  
 
     const handleRemoveFromCart = (index) => {  
@@ -24,10 +25,14 @@ const ShoppingCart = () => {
             
             <h2>Créditos en el Carrito</h2>  
             <ul>  
-                {cart.map((credits, index) => (  
+                {cart.map((item, index) => (  
                     <li key={index}>  
-                        {credits} Créditos   
-                        <button onClick={() => handleRemoveFromCart(index)} style={{ marginLeft: '10px', color: 'darkred', background: 'none', cursor: 'pointer' }}>✖</button>  
+                        {item.value} Créditos - Precio: ${item.price}  
+                        <button   
+                            onClick={() => handleRemoveFromCart(index)}   
+                            style={{ marginLeft: '10px', color: 'darkred', background: 'none', cursor: 'pointer' }}>  
+                            ✖  
+                        </button>  
                     </li>  
                 ))}  
             </ul>  

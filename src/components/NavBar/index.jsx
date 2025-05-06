@@ -7,8 +7,8 @@ import logo from './LogoFun-Photoroom.png';
 
 const Navbar = () => {
   const buttonStyle = {
-    width: '20px',   
-    height: '20px',       
+    width: '40px',   
+    height: '40px',       
     padding: '0.125rem',   
     flex: '0 0 auto'        
   };
@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid flex-column flex-lg-row">
-        <div className="d-flex w-50 justify-content-between align-items-center">
+        <div className="d-flex w-100 justify-content-between align-items-center">
           <a className="navbar-brand" href="/">
             <img 
               src={logo} 
