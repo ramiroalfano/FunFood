@@ -5,34 +5,16 @@ import { getAuth } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
 import { getFirestore } from 'firebase/firestore';
 
-// Verificar que las variables de entorno estén disponibles
-const requiredEnvVars = [
-  'REACT_APP_FIREBASE_API_KEY',
-  'REACT_APP_FIREBASE_AUTH_DOMAIN',
-  'REACT_APP_FIREBASE_PROJECT_ID',
-  'REACT_APP_FIREBASE_STORAGE_BUCKET',
-  'REACT_APP_FIREBASE_MESSAGING_SENDER_ID',
-  'REACT_APP_FIREBASE_APP_ID',
-  'REACT_APP_FIREBASE_MEASUREMENT_ID',
-  'REACT_APP_FIREBASE_DATABASE_URL'
-];
-
-// Verificar que todas las variables de entorno requeridas estén presentes
-const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
-if (missingEnvVars.length > 0) {
-  console.error('Missing required environment variables:', missingEnvVars);
-  throw new Error('Missing required environment variables. Please check your .env file.');
-}
-
+// Configuración de Firebase
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
-  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyD18P_ysxh44PZPT10xkfR0Ifq2BSMQh-Q",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "funfood-371b5.firebaseapp.com",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "funfood-371b5",
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "funfood-371b5.appspot.com",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "901586123943",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:901586123943:web:b10e1ae4b3b23527ed6f82",
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-0S7HV74RFB",
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL || "https://funfood-371b5-default-rtdb.firebaseio.com"
 };
 
 // Inicializar Firebase
