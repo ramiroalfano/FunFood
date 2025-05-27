@@ -9,6 +9,9 @@ import Form from './components/form';
 import CreditsCard from './components/Creditos/CreditsCard';
 import Calendar from './components/Calendario/Calendar';
 import Contact from './components/Contact'; 
+import ProtectedView from './components/ProtectedView';
+import AuthPanel from './components/AuthPanel';
+import AdminPanel from './components/AdminPanel';
 // import Contact from './components/Contact'; // Componente para la vista de contacto  
 
 const App = () => {  
@@ -24,6 +27,9 @@ const App = () => {
                     <Route path="/CreditsCard" element={<CreditsCard />} /> 
                     <Route path="/Calendar" element={<Calendar />} /> 
                     <Route path="/Contact" element={<Contact />} /> 
+                    <Route path="/protected" element={<ProtectedView />} />
+                    <Route path="/auth" element={<AuthPanel />} />
+                    <Route path="/admin" element={<AdminPanel />} />
                 </Routes>  
                 <Footer />  
             </div>  

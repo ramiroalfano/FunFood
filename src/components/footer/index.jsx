@@ -33,19 +33,7 @@ const Footer = () => {
                         </a>  
                     </div>  
                     <div className="col-md-6 text-center text-md-end">  
-                        <div className="social-icons">  
-                            <a href="#" aria-label="Facebook"   
-                               style={socialIconStyle}   
-                               onMouseOver={e => e.currentTarget.style.color = socialIconHoverStyle.color}   
-                               onMouseOut={e => e.currentTarget.style.color = socialIconStyle.color}>  
-                                <i className="fab fa-facebook-f"></i>  
-                            </a>  
-                            <a href="#" aria-label="Twitter"   
-                               style={socialIconStyle}   
-                               onMouseOver={e => e.currentTarget.style.color = socialIconHoverStyle.color}   
-                               onMouseOut={e => e.currentTarget.style.color = socialIconStyle.color}>  
-                                <i className="fab fa-twitter"></i>  
-                            </a>  
+                        <div className="social-icons">   
                             <a href="#" aria-label="Instagram"   
                                style={socialIconStyle}   
                                onMouseOver={e => e.currentTarget.style.color = socialIconHoverStyle.color}   

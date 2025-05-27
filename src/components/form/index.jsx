@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
+import { ref, push, set } from 'firebase/database';
+import { db } from '../../firebase-config';
 import './style.css';
-// Importa solo la instancia de Realtime Database (rtdb) desde tu archivo de configuración
-import { rtdb } from '../firebase/FirebaseConfig';
-
-// ¡Elimina o comenta cualquier inicialización de Firebase que estuviera aquí!
-/*
-if (!firebase.apps.length) {
-  firebase.initializeApp({...});
-}
-*/
 
 const Form = () => {
   const [forms, setForms] = useState([{ id: 1 }]);
+  const [submitStatus, setSubmitStatus] = useState({ loading: false, error: null, success: false });
 
   const addForm = () => {
     setForms([...forms, { id: forms.length + 1 }]);
@@ -21,82 +15,124 @@ const Form = () => {
     setForms(forms.filter(form => form.id !== id));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setSubmitStatus({ loading: true, error: null, success: false });
 
-    const dataToSubmit = forms.map((form) => {
-      const nombre = event.target[`nombre-${form.id}`].value;
-      const apellido = event.target[`apellido-${form.id}`].value;
-      const tel = event.target[`tel-${form.id}`].value;
-      const curso = event.target[`curso-${form.id}`].value;
-      const mensaje = event.target[`mensaje-${form.id}`].value;
+    try {
+      console.log("Iniciando envío de formulario...");
+      
+      const dataToSubmit = forms.map((form) => {
+        const nombre = event.target[`nombre-${form.id}`].value;
+        const apellido = event.target[`apellido-${form.id}`].value;
+        const tel = event.target[`tel-${form.id}`].value;
+        const curso = event.target[`curso-${form.id}`].value;
+        const mensaje = event.target[`mensaje-${form.id}`].value;
 
-      return {
-        nombre,
-        apellido,
-        tel,
-        curso,
-        mensaje
-      };
-    });
+        return {
+          nombre,
+          apellido,
+          tel,
+          curso,
+          mensaje,
+          createdAt: new Date().toISOString()
+        };
+      });
 
-    saveDataToFirebase(dataToSubmit, event.target); // Pasar event.target
+      console.log("Datos a enviar:", dataToSubmit);
 
-    console.log("Formulario enviado", dataToSubmit);
-  };
+      // Guardar cada formulario en Realtime Database
+      const formsRef = ref(db, 'forms');
+      for (const formData of dataToSubmit) {
+        console.log("Enviando datos:", formData);
+        const newFormRef = push(formsRef);
+        await set(newFormRef, formData);
+        console.log("Datos guardados con ID:", newFormRef.key);
+      }
 
-  const saveDataToFirebase = (data, formElement) => {
-    // Usa la instancia de RTDB importada (rtdb) para obtener la referencia
-    const dbRef = rtdb.ref('hijos'); // 'hijos' es el nodo principal
+      // Limpiar el formulario
+      event.target.reset();
+      setForms([{ id: 1 }]);
+      setSubmitStatus({ loading: false, error: null, success: true });
+      
+      // Mostrar mensaje de éxito por 3 segundos
+      setTimeout(() => {
+        setSubmitStatus(prev => ({ ...prev, success: false }));
+      }, 3000);
 
-    data.forEach((hijoData) => {
-      dbRef.push(hijoData) // Usamos push() para crear un ID único
-        .then(() => {
-          console.log('Datos del hijo guardados con éxito!');
-        })
-        .catch((error) => {
-          console.error('Error al guardar los datos del hijo:', error);
-          // Maneja el error
-        });
-    });
-
-    // Limpiar el formulario principal
-    if (formElement && typeof formElement.reset === 'function') {
-      formElement.reset();
+    } catch (error) {
+      console.error('Error al guardar los datos:', error);
+      setSubmitStatus({ 
+        loading: false, 
+        error: `Error al guardar los datos: ${error.message}`, 
+        success: false 
+      });
     }
   };
 
   return (
     <section className="formContainer">
       <h1 className="text-center mb-4">Indique los datos de su hijo/a</h1>
+      
+      {submitStatus.error && (
+        <div className="alert alert-danger" role="alert">
+          {submitStatus.error}
+        </div>
+      )}
+      
+      {submitStatus.success && (
+        <div className="alert alert-success" role="alert">
+          ¡Formulario enviado con éxito!
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
         {forms.map((form) => (
           <div key={form.id} className="formWrapper" style={{ marginBottom: '1rem' }}>
-             <div className="form-header">
-               <h2 className="form-title">Formulario Hijos {form.id}</h2>
-               <button type="button" className="removeButton" onClick={() => removeForm(form.id)} aria-label="Eliminar formulario">
-                 &times;
-               </button>
-             </div>
-             <label htmlFor={`nombre-${form.id}`} className="form__label">Nombre</label>
-             <input type="text" name={`nombre-${form.id}`} id={`nombre-${form.id}`} className="form__input" required />
+            <div className="form-header">
+              <h2 className="form-title">Formulario Hijos {form.id}</h2>
+              {forms.length > 1 && (
+                <button 
+                  type="button" 
+                  className="removeButton" 
+                  onClick={() => removeForm(form.id)} 
+                  aria-label="Eliminar formulario"
+                >
+                  &times;
+                </button>
+              )}
+            </div>
+            <label htmlFor={`nombre-${form.id}`} className="form__label">Nombre</label>
+            <input type="text" name={`nombre-${form.id}`} id={`nombre-${form.id}`} className="form__input" required />
 
-             <label htmlFor={`apellido-${form.id}`} className="form__label">Apellido</label>
-             <input type="text" name={`apellido-${form.id}`} id={`apellido-${form.id}`} className="form__input" required />
+            <label htmlFor={`apellido-${form.id}`} className="form__label">Apellido</label>
+            <input type="text" name={`apellido-${form.id}`} id={`apellido-${form.id}`} className="form__input" required />
 
-             <label htmlFor={`tel-${form.id}`} className="form__label">Teléfono</label>
-             <input type="tel" name={`tel-${form.id}`} id={`tel-${form.id}`} className="form__input" required />
+            <label htmlFor={`tel-${form.id}`} className="form__label">Teléfono</label>
+            <input type="tel" name={`tel-${form.id}`} id={`tel-${form.id}`} className="form__input" required />
 
-             <label htmlFor={`curso-${form.id}`} className="form__label">Colegio y curso</label>
-             <input type="text" name={`curso-${form.id}`} id={`curso-${form.id}`} className="form__input" required />
+            <label htmlFor={`curso-${form.id}`} className="form__label">Colegio y curso</label>
+            <input type="text" name={`curso-${form.id}`} id={`curso-${form.id}`} className="form__input" required />
 
-             <label htmlFor={`mensaje-${form.id}`} className="form__label">Comentario sobre la comida</label>
-             <textarea name={`mensaje-${form.id}`} id={`mensaje-${form.id}`} className="form__textarea" required></textarea>
+            <label htmlFor={`mensaje-${form.id}`} className="form__label">Comentario sobre la comida</label>
+            <textarea name={`mensaje-${form.id}`} id={`mensaje-${form.id}`} className="form__textarea"></textarea>
           </div>
         ))}
-        <input type="submit" className="form__input form__input--submit" value="Enviar" />
+        <input 
+          type="submit" 
+          className="form__input form__input--submit" 
+          value={submitStatus.loading ? "Enviando..." : "Enviar"} 
+          disabled={submitStatus.loading}
+        />
       </form>
-      <button type="button" className="form__input form__input--submit" onClick={addForm}>Agregar más hijos</button>
+      <button 
+        type="button" 
+        className="form__input form__input--submit" 
+        onClick={addForm}
+        disabled={submitStatus.loading}
+      >
+        Agregar más hijos
+      </button>
     </section>
   );
 };

@@ -1,35 +1,45 @@
 // src/firebase/FirebaseConfig.js
 
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/database'; // Para Realtime Database
-import 'firebase/compat/firestore'; // Para Cloud Firestore
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getDatabase } from 'firebase/database';
+import { getFirestore } from 'firebase/firestore';
 
-// Tu configuración de Firebase (¡USA TUS VALORES REALES AQUÍ!)
-const firebaseConfig = {
-  apiKey: "TU_API_KEY_REAL", // Reemplaza con tu API Key
-  authDomain: "funfood-371b5.firebaseapp.com",
-  databaseURL: "https://funfood-371b5-default-rtdb.firebaseio.com", // URL de RTDB
-  projectId: "funfood-371b5",
-  storageBucket: "funfood-371b5.appspot.com",
-  messagingSenderId: "901586123943",
-  appId: "1:901586123943:web:...", // Tu App ID web
-  measurementId: "G-..." // Si usas Analytics
-};
+// Verificar que las variables de entorno estén disponibles
+const requiredEnvVars = [
+  'REACT_APP_FIREBASE_API_KEY',
+  'REACT_APP_FIREBASE_AUTH_DOMAIN',
+  'REACT_APP_FIREBASE_PROJECT_ID',
+  'REACT_APP_FIREBASE_STORAGE_BUCKET',
+  'REACT_APP_FIREBASE_MESSAGING_SENDER_ID',
+  'REACT_APP_FIREBASE_APP_ID',
+  'REACT_APP_FIREBASE_MEASUREMENT_ID',
+  'REACT_APP_FIREBASE_DATABASE_URL'
+];
 
-// Inicializa Firebase SOLO si aún no se ha inicializado
-let firebaseApp;
-if (!firebase.apps.length) {
-  firebaseApp = firebase.initializeApp(firebaseConfig);
-  console.log("Firebase inicializado correctamente en FirebaseConfig.js"); // Opcional
-} else {
-  firebaseApp = firebase.app(); // Si ya está inicializado, obtenemos la instancia existente
-  console.log("Firebase ya estaba inicializado."); // Opcional
+// Verificar que todas las variables de entorno requeridas estén presentes
+const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
+if (missingEnvVars.length > 0) {
+  console.error('Missing required environment variables:', missingEnvVars);
+  throw new Error('Missing required environment variables. Please check your .env file.');
 }
 
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL
+};
 
-// Obtén y exporta las instancias de los servicios
-export const rtdb = firebaseApp.database(); // Instancia de Realtime Database
-export const firestoreDb = firebaseApp.firestore(); // Instancia de Cloud Firestore
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const database = getDatabase(app);
+export const firestoreDb = getFirestore(app);
 
 // También podrías exportar la instancia de la app si la necesitas en algún lugar
 // export const app = firebaseApp;

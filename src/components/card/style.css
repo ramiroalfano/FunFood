@@ -14,6 +14,16 @@
     text-decoration: none;
 }  
 
+.bento-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .bento-item::after {  
     content: '';
     position: absolute;
@@ -24,7 +34,6 @@
     background-color: rgba(0, 0, 0, 0.4);  
     border-radius: 15px; 
     z-index: 1; 
-    text-decoration: none;
 }  
 
 h2 { 
@@ -35,10 +44,8 @@ h2 {
 
 .bento-item:hover {  
     transform: scale(1.05);
-    text-decoration: none;  
 }  
 
 .bento-tall {  
     height: 410px; 
-    text-decoration: none;  
 }   
