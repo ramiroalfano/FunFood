@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ref, onValue } from 'firebase/database';
-import { db, auth } from '../firebase-config';
+import { ref, onValue, get } from 'firebase/database';
+import { auth, database, firestoreDb } from './firebase/FirebaseConfig';
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import './AdminPanel.css';
 
 function AdminPanel() {
@@ -13,7 +14,6 @@ function AdminPanel() {
   // Lista de UIDs de administradores
   const ADMIN_UIDS = [
     "AiMS1FYPrjdFWIA5i1kilUO41mj2", // Reemplaza esto con tu UID
-    // Puedes agregar más UIDs de administradores aquí
   ];
 
   useEffect(() => {
@@ -31,31 +31,31 @@ function AdminPanel() {
     return () => unsubscribe();
   }, []);
 
-  const fetchFormData = () => {
+  const fetchFormData = async () => {
     try {
       setLoading(true);
-      const formsRef = ref(db, 'forms');
+      setError(null);
       
-      onValue(formsRef, (snapshot) => {
+      const formsRef = ref(database, 'forms');
+      const snapshot = await get(formsRef);
+      
+      if (snapshot.exists()) {
         const data = snapshot.val();
-        if (data) {
-          const formsList = Object.entries(data).map(([id, form]) => ({
-            id,
-            ...form
-          }));
-          setFormData(formsList);
-        } else {
-          setFormData([]);
-        }
-        setLoading(false);
-      }, (error) => {
-        console.error("Error al obtener datos:", error);
-        setError("Error al cargar los datos");
-        setLoading(false);
-      });
+        const formsList = Object.entries(data).map(([id, form]) => ({
+          id,
+          ...form,
+          createdAt: form.createdAt || new Date().toISOString()
+        }));
+        console.log("Datos obtenidos:", formsList);
+        setFormData(formsList);
+      } else {
+        console.log("No hay datos disponibles");
+        setFormData([]);
+      }
     } catch (err) {
-      console.error("Error:", err);
-      setError("Error al cargar los datos");
+      console.error("Error al obtener datos:", err);
+      setError("Error al cargar los datos. Por favor, intenta nuevamente.");
+    } finally {
       setLoading(false);
     }
   };
@@ -74,7 +74,7 @@ function AdminPanel() {
       }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
-      setError("Error al iniciar sesión");
+      setError("Error al iniciar sesión. Por favor, intenta nuevamente.");
     }
   };
 
@@ -84,6 +84,7 @@ function AdminPanel() {
       console.log("Sesión cerrada exitosamente");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
+      setError("Error al cerrar sesión. Por favor, intenta nuevamente.");
     }
   };
 
@@ -139,6 +140,15 @@ function AdminPanel() {
         </div>
       </div>
 
+      <div className="admin-navigation">
+        <button 
+          className="admin-button"
+          onClick={() => window.location.href = '/admin-menu'}
+        >
+          Administrar Menú
+        </button>
+      </div>
+
       <div className="forms-list">
         <h3>Formularios Enviados ({formData.length})</h3>
         {formData.length === 0 ? (
@@ -149,11 +159,11 @@ function AdminPanel() {
               <div key={form.id} className="form-card">
                 <h4>Formulario #{form.id}</h4>
                 <div className="form-details">
-                  <p><strong>Nombre:</strong> {form.nombre}</p>
-                  <p><strong>Apellido:</strong> {form.apellido}</p>
-                  <p><strong>Teléfono:</strong> {form.tel}</p>
-                  <p><strong>Curso:</strong> {form.curso}</p>
-                  <p><strong>Mensaje:</strong> {form.mensaje}</p>
+                  <p><strong>Nombre:</strong> {form.nombre || 'No especificado'}</p>
+                  <p><strong>Apellido:</strong> {form.apellido || 'No especificado'}</p>
+                  <p><strong>Teléfono:</strong> {form.tel || 'No especificado'}</p>
+                  <p><strong>Curso:</strong> {form.curso || 'No especificado'}</p>
+                  <p><strong>Mensaje:</strong> {form.mensaje || 'No especificado'}</p>
                   <p><strong>Fecha:</strong> {new Date(form.createdAt).toLocaleString()}</p>
                 </div>
               </div>

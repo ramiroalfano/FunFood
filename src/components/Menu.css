@@ -1,0 +1,264 @@
+.menu-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.menu-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.days-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.day-button {
+  padding: 0.8rem 1.5rem;
+  border: 2px solid #4CAF50;
+  border-radius: 4px;
+  background: white;
+  color: #4CAF50;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.day-button:hover {
+  background: #e8f5e9;
+}
+
+.day-button.selected {
+  background: #4CAF50;
+  color: white;
+}
+
+.show-days-button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  background: #2196F3;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.show-days-button:hover {
+  background: #1976D2;
+}
+
+.days-alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.days-alert-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 90%;
+}
+
+.days-alert-content h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.days-alert-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.days-alert-content li {
+  padding: 0.5rem;
+  border-bottom: 1px solid #eee;
+  color: #2c3e50;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.day-section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.day-section h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #eee;
+}
+
+.day-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.menu-item {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.menu-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item.selected {
+  border-color: #4CAF50;
+  background: #e8f5e9;
+}
+
+.menu-item.out-of-stock {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #f5f5f5;
+}
+
+.item-details h4 {
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+}
+
+.stock {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.out-of-stock-message {
+  color: #dc3545;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.purchase-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.purchase-section h3 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.purchase-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.purchase-button:hover {
+  background: #45a049;
+}
+
+.error-message {
+  background: #fff3f3;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.success-message {
+  background: #d4edda;
+  border: 1px solid #28a745;
+  color: #28a745;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0 0.5rem;
+}
+
+.close-button:hover {
+  color: #c82333;
+}
+
+@media (max-width: 768px) {
+  .menu-container {
+    padding: 1rem;
+  }
+
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .days-selection {
+    flex-direction: column;
+  }
+
+  .day-button {
+    width: 100%;
+  }
+
+  .show-days-button {
+    width: 100%;
+  }
+
+  .purchase-section {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .purchase-button {
+    width: 100%;
+  }
+} 
