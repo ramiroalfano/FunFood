@@ -10,6 +10,7 @@ function AdminPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Lista de UIDs de administradores
   const ADMIN_UIDS = [
@@ -17,14 +18,40 @@ function AdminPanel() {
   ];
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       console.log("Estado de autenticación cambiado:", user);
       setUser(user);
-      if (user && ADMIN_UIDS.includes(user.uid)) {
-        console.log("Usuario autorizado, cargando datos...");
-        fetchFormData();
-      } else if (user) {
-        console.log("Usuario no autorizado:", user.uid);
+      
+      if (user) {
+        // Primero verificar si el usuario está en la lista de ADMIN_UIDS
+        if (ADMIN_UIDS.includes(user.uid)) {
+          console.log("Usuario autorizado por UID, cargando datos...");
+          setIsAdmin(true);
+          fetchFormData();
+          return;
+        }
+
+        // Si no está en la lista, verificar en la base de datos
+        const userRef = ref(database, `users/${user.uid}`);
+        try {
+          const snapshot = await get(userRef);
+          if (snapshot.exists()) {
+            const userData = snapshot.val();
+            const isUserAdmin = userData.role === 'admin';
+            setIsAdmin(isUserAdmin);
+            if (isUserAdmin) {
+              console.log("Usuario autorizado por rol, cargando datos...");
+              fetchFormData();
+            } else {
+              console.log("Usuario no autorizado:", user.uid);
+            }
+          }
+        } catch (error) {
+          console.error('Error al verificar rol de usuario:', error);
+          setError("Error al verificar permisos de administrador");
+        }
+      } else {
+        setIsAdmin(false);
       }
     });
 
@@ -67,7 +94,17 @@ function AdminPanel() {
       const result = await signInWithPopup(auth, provider);
       console.log("Login exitoso:", result.user.uid);
       
-      if (!ADMIN_UIDS.includes(result.user.uid)) {
+      // Verificar si el usuario está en la lista de ADMIN_UIDS
+      if (ADMIN_UIDS.includes(result.user.uid)) {
+        console.log("Usuario autorizado por UID");
+        return;
+      }
+
+      // Si no está en la lista, verificar en la base de datos
+      const userRef = ref(database, `users/${result.user.uid}`);
+      const snapshot = await get(userRef);
+      
+      if (!snapshot.exists() || snapshot.val().role !== 'admin') {
         console.log("Usuario no autorizado, cerrando sesión...");
         await signOut(auth);
         setError("No tienes permisos de administrador");
@@ -100,7 +137,7 @@ function AdminPanel() {
     );
   }
 
-  if (!ADMIN_UIDS.includes(user.uid)) {
+  if (!isAdmin && !ADMIN_UIDS.includes(user.uid)) {
     return (
       <div className="admin-container">
         <h2>Acceso Denegado</h2>

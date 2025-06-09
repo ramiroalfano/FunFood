@@ -73,9 +73,7 @@ const Navbar = () => {
             {user ? (
               <>
                 <Link className="nav-link d-flex align-items-center" to="/protected">Mi Perfil</Link>
-                {isAdmin && (
-                  <Link className="nav-link d-flex align-items-center" to="/admin">Panel de Administración</Link>
-                )}
+                <Link className="nav-link d-flex align-items-center" to="/admin">Panel de Administración</Link>
                 <button 
                   className="nav-link btn btn-link d-flex align-items-center" 
                   onClick={handleLogout}
