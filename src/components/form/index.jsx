@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ref, push, set } from 'firebase/database';
 import { db } from '../../firebase-config';
+import { auth, database, firestoreDb } from '../firebase/FirebaseConfig';
 import './style.css';
 
 const Form = () => {
@@ -22,6 +23,11 @@ const Form = () => {
     try {
       console.log("Iniciando envío de formulario...");
       
+      const user = auth.currentUser; // Get the current authenticated user
+      if (!user) {
+        throw new Error("No user authenticated. Please refresh the page.");
+      }
+
       const dataToSubmit = forms.map((form) => {
         const nombre = event.target[`nombre-${form.id}`].value;
         const apellido = event.target[`apellido-${form.id}`].value;
@@ -35,7 +41,8 @@ const Form = () => {
           tel,
           curso,
           mensaje,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          userId: user.uid // Add the user's UID
         };
       });
 

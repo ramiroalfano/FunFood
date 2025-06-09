@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { firestoreDb } from './firebase/FirebaseConfig';
+import { firestoreDb } from '../firebase/FirebaseConfig';
 import { collection, getDocs, updateDoc, doc, increment } from 'firebase/firestore';
 import './Menu.css';
 
@@ -8,9 +8,7 @@ function Menu() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [selectedDays, setSelectedDays] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showDaysAlert, setShowDaysAlert] = useState(false);
 
   const DAYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 
@@ -53,23 +51,6 @@ function Menu() {
       console.log("Seleccionando ítem:", item.id);
       setSelectedItems([...selectedItems, item]);
     }
-  };
-
-  const handleDaySelection = (day) => {
-    const isSelected = selectedDays.includes(day);
-    if (isSelected) {
-      setSelectedDays(selectedDays.filter(d => d !== day));
-    } else {
-      setSelectedDays([...selectedDays, day]);
-    }
-  };
-
-  const handleShowSelectedDays = () => {
-    if (selectedDays.length === 0) {
-      setError("Por favor, selecciona al menos un día.");
-      return;
-    }
-    setShowDaysAlert(true);
   };
 
   const handlePurchase = async () => {
@@ -118,7 +99,7 @@ function Menu() {
 
   return (
     <div className="menu-container">
-      <h2>Menú Semanal</h2>
+      <h2>Nuestro Menú Semanal</h2>
       
       {error && (
         <div className="error-message">
@@ -134,37 +115,6 @@ function Menu() {
           <p>¡Compra realizada con éxito!</p>
         </div>
       )}
-
-      {showDaysAlert && (
-        <div className="days-alert">
-          <div className="days-alert-content">
-            <h3>Días Seleccionados:</h3>
-            <ul>
-              {selectedDays.map(day => (
-                <li key={day}>{day}</li>
-              ))}
-            </ul>
-            <button onClick={() => setShowDaysAlert(false)} className="close-button">
-              Cerrar
-            </button>
-          </div>
-        </div>
-      )}
-
-      <div className="days-selection">
-        {DAYS.map(day => (
-          <button
-            key={day}
-            className={`day-button ${selectedDays.includes(day) ? 'selected' : ''}`}
-            onClick={() => handleDaySelection(day)}
-          >
-            {day}
-          </button>
-        ))}
-        <button onClick={handleShowSelectedDays} className="show-days-button">
-          Ver Días Seleccionados
-        </button>
-      </div>
 
       <div className="menu-grid">
         {DAYS.map(day => (

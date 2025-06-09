@@ -52,9 +52,9 @@ const Card = () => {
                     </Link>  
                 </div>  
                 <div className="col-md-4">  
-                    <Link to="/Calendar"> {/* Enlace a la vista de mis créditos */}  
+                    <Link to="/sporadic-purchases"> {/* Enlace a la vista de compras esporádicas */}  
                         <div className="bento-item" style={{ backgroundImage: `url(${mediumImage2})` }}>   
-                            <h2>Elegir Menu</h2>  
+                            <h2>Compras Esporádicas</h2>  
                         </div>  
                     </Link>  
                 </div>  

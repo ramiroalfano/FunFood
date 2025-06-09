@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { auth, firestoreDb } from './firebase/FirebaseConfig';
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
@@ -70,7 +70,8 @@ function AdminMenu() {
       const stockValue = parseInt(newMenuItem.stock) || 0;
       
       const newItem = {
-        ...newMenuItem,
+        day: newMenuItem.day,
+        food: newMenuItem.food,
         stock: stockValue,
         createdAt: new Date().toISOString(),
         createdBy: user.uid

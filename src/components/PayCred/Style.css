@@ -37,3 +37,41 @@ button[style] {
     font-size: 1.5rem;  
     padding: 0;  
 } 
+
+.cart-summary {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.cart-summary h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+/* Estilos para la sección de pago */
+.payment-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.payment-section h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.payment-section p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Estilos para el botón de Mercado Pago */
+.mercadopago-button {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+} 
