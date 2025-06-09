@@ -1,18 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase/FirebaseConfig';
+import { auth, database } from '../firebase/FirebaseConfig';
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { ref, get } from 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import logo from './LogoFun-Photoroom.png';
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setUser(user);
+      if (user) {
+        // Verificar si el usuario es admin
+        const userRef = ref(database, `users/${user.uid}`);
+        try {
+          const snapshot = await get(userRef);
+          if (snapshot.exists()) {
+            const userData = snapshot.val();
+            setIsAdmin(userData.role === 'admin');
+          }
+        } catch (error) {
+          console.error('Error al verificar rol de usuario:', error);
+        }
+      } else {
+        setIsAdmin(false);
+      }
     });
 
     return () => unsubscribe();
@@ -56,7 +73,9 @@ const Navbar = () => {
             {user ? (
               <>
                 <Link className="nav-link d-flex align-items-center" to="/protected">Mi Perfil</Link>
-                <Link className="nav-link d-flex align-items-center" to="/admin">Panel de Administración</Link>
+                {isAdmin && (
+                  <Link className="nav-link d-flex align-items-center" to="/admin">Panel de Administración</Link>
+                )}
                 <button 
                   className="nav-link btn btn-link d-flex align-items-center" 
                   onClick={handleLogout}
