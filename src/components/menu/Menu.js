@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { firestoreDb } from '../firebase/FirebaseConfig';
 import { collection, getDocs, updateDoc, doc, increment } from 'firebase/firestore';
 import './Menu.css';
+import PaymentButton from '../PaymentButton';
 
 function Menu() {
   const [menuData, setMenuData] = useState([]);
@@ -11,6 +12,8 @@ function Menu() {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const DAYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+  const PRICE_SINGLE = 6500; // Precio para 1-2 ítems
+  const PRICE_MULTIPLE = 6000; // Precio para 3 o más ítems
 
   useEffect(() => {
     fetchMenuData();
@@ -145,10 +148,53 @@ function Menu() {
 
       {selectedItems.length > 0 && (
         <div className="purchase-section">
-          <h3>Ítems seleccionados: {selectedItems.length}</h3>
-          <button onClick={handlePurchase} className="purchase-button">
-            Comprar seleccionados
-          </button>
+          <h3>Resumen de Compra</h3>
+          <div className="selected-items">
+            <h4>Ítems seleccionados: {selectedItems.length}</h4>
+            <ul>
+              {selectedItems.map((item, index) => (
+                <li key={index}>{item.food}</li>
+              ))}
+            </ul>
+            <div className="price-breakdown">
+              <p>Precio por ítem: ${selectedItems.length <= 2 ? PRICE_SINGLE : PRICE_MULTIPLE}</p>
+              <p>Subtotal: ${selectedItems.length <= 2 ? 
+                selectedItems.length * PRICE_SINGLE : 
+                selectedItems.length * PRICE_MULTIPLE}</p>
+              {selectedItems.length >= 3 && (
+                <p className="discount">¡Descuento aplicado por comprar 3 o más ítems!</p>
+              )}
+              <h4>Total a pagar: ${selectedItems.length <= 2 ? 
+                selectedItems.length * PRICE_SINGLE : 
+                selectedItems.length * PRICE_MULTIPLE}</h4>
+            </div>
+          </div>
+          
+          {/* Lógica de pago integrada */}
+          {(() => {
+            // Genera un orderId único
+            const orderId = `orden-${Date.now()}`;
+            
+            // Calcula el total
+            const totalAmount = selectedItems.length <= 2 
+              ? selectedItems.length * PRICE_SINGLE 
+              : selectedItems.length * PRICE_MULTIPLE;
+            
+            // Prepara los items para Mercado Pago
+            const items = selectedItems.map(item => ({
+              title: item.food,
+              quantity: 1,
+              price: selectedItems.length <= 2 ? PRICE_SINGLE : PRICE_MULTIPLE
+            }));
+
+            return (
+              <PaymentButton
+                orderId={orderId}
+                items={items}
+                totalAmount={totalAmount}
+              />
+            );
+          })()}
         </div>
       )}
     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 // Importa las funciones de Firestore directamente desde el paquete
 import { collection, doc, updateDoc, getDocs } from 'firebase/firestore'; 
 // Importa tu instancia de la base de datos desde tu archivo de configuración
@@ -11,6 +12,7 @@ const Calendar = () => {
     const [selectedDays, setSelectedDays] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -68,8 +70,11 @@ const Calendar = () => {
     };
 
     const handleSubmit = () => {
-        const alertMessage = selectedDays.map(day => `${day}: 1 crédito`).join('\n');
-        alert(`Días seleccionados y créditos gastados:\n${alertMessage}`);
+        if (selectedDays.length > 0) {
+            navigate('/menu-payment', { state: { selectedDays } });
+        } else {
+            alert('Por favor, selecciona al menos un día');
+        }
     };
 
     // Renderizado condicional
@@ -98,7 +103,13 @@ const Calendar = () => {
                     </div>
                 ))}
             </div>
-            <button onClick={handleSubmit}>Enviar</button>
+            <button 
+                onClick={handleSubmit}
+                className="submit-button"
+                disabled={selectedDays.length === 0}
+            >
+                Proceder al Pago
+            </button>
         </div>
     );
 };

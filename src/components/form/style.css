@@ -91,3 +91,68 @@
     font-size: 1.2rem; /* Ajustar tamaño del título del formulario */  
     flex-grow: 1; /* Permitir que el título crezca para ocupar el espacio disponible */  
 }  
+
+/* Estilos para la sección de formularios anteriores */
+.previous-forms {
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+}
+
+.previous-forms h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.forms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.form-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-card h4 {
+  color: #e47c1c;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.form-details p {
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+.form-details strong {
+  color: #333;
+  margin-right: 0.5rem;
+}
+
+/* Estilos para los mensajes de alerta */
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}

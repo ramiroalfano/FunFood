@@ -69,7 +69,7 @@ const Navbar = () => {
         <div className="d-flex align-items-center">
           <div className="navbar-nav d-flex align-items-center">
             <Link className="nav-link d-flex align-items-center" to="/">Inicio</Link>
-            <Link className="nav-link d-flex align-items-center" to="/ShoppingCart">Compras</Link>
+            <Link className="nav-link d-flex align-items-center" to="/Menu">Compras</Link>
             {user ? (
               <>
                 <Link className="nav-link d-flex align-items-center" to="/protected">Mi Perfil</Link>

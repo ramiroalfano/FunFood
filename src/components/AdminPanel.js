@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ref, onValue, get } from 'firebase/database';
+import { ref, onValue, get, push, set } from 'firebase/database';
 import { auth, database, firestoreDb } from './firebase/FirebaseConfig';
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
@@ -11,6 +11,9 @@ function AdminPanel() {
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [children, setChildren] = useState([]);
+  const [selectedChild, setSelectedChild] = useState('');
+  const [selectedItems, setSelectedItems] = useState([]);
 
   // Lista de UIDs de administradores
   const ADMIN_UIDS = [
@@ -56,6 +59,26 @@ function AdminPanel() {
     });
 
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      const formsRef = ref(database, 'forms');
+      onValue(formsRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const childrenList = Object.entries(data)
+            .filter(([_, form]) => form.userId === user.uid)
+            .map(([id, form]) => ({
+              id,
+              nombre: form.nombre,
+              apellido: form.apellido
+            }));
+          setChildren(childrenList);
+        }
+      });
+    }
   }, []);
 
   const fetchFormData = async () => {
@@ -122,6 +145,46 @@ function AdminPanel() {
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
       setError("Error al cerrar sesión. Por favor, intenta nuevamente.");
+    }
+  };
+
+  const userId = localStorage.getItem("userId");
+
+  const handleCardSelect = (cardId) => {
+    fetch("/api/seleccion-card", {
+      method: "POST",
+      body: JSON.stringify({ userId, cardId }),
+    });
+  };
+
+  const handlePurchase = async () => {
+    if (selectedItems.length === 0) {
+      setError("Por favor, selecciona al menos un ítem para comprar.");
+      return;
+    }
+    if (!selectedChild) {
+      setError("Por favor, selecciona un hijo para la compra.");
+      return;
+    }
+
+    try {
+      // ...actualización de stock...
+
+      // Guardar la compra en Realtime Database
+      const purchaseRef = ref(database, 'purchases');
+      await set(push(purchaseRef), {
+        userId: auth.currentUser.uid,
+        childId: selectedChild,
+        items: selectedItems.map(item => ({
+          id: item.id,
+          food: item.food
+        })),
+        createdAt: new Date().toISOString()
+      });
+
+      // ...resto de tu lógica (actualizar menú, mostrar éxito, etc.)...
+    } catch (err) {
+      // ...manejo de errores...
     }
   };
 
@@ -194,7 +257,7 @@ function AdminPanel() {
           <div className="forms-grid">
             {formData.map((form) => (
               <div key={form.id} className="form-card">
-                <h4>Formulario #{form.id}</h4>
+                <h4>Formulario </h4>
                 <div className="form-details">
                   <p><strong>Nombre:</strong> {form.nombre || 'No especificado'}</p>
                   <p><strong>Apellido:</strong> {form.apellido || 'No especificado'}</p>
@@ -208,6 +271,24 @@ function AdminPanel() {
           </div>
         )}
       </div>
+
+      {selectedItems.length > 0 && (
+        <div className="purchase-section">
+          <label>Selecciona el hijo para esta compra:</label>
+          <select
+            value={selectedChild}
+            onChange={e => setSelectedChild(e.target.value)}
+            required
+          >
+            <option value="">Selecciona un hijo</option>
+            {children.map(child => (
+              <option key={child.id} value={child.id}>
+                {child.nombre} {child.apellido}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
     </div>
   );
 }

@@ -35,15 +35,15 @@ const Footer = () => {
                     <div className="col-md-6 text-center text-md-end">  
                         <div className="social-icons">   
                             <a href="#" aria-label="Instagram"   
-                               style={socialIconStyle}   
-                               onMouseOver={e => e.currentTarget.style.color = socialIconHoverStyle.color}   
-                               onMouseOut={e => e.currentTarget.style.color = socialIconStyle.color}>  
+                            style={socialIconStyle}   
+                            onMouseOver={e => e.currentTarget.style.color = socialIconHoverStyle.color}   
+                            onMouseOut={e => e.currentTarget.style.color = socialIconStyle.color}>  
                                 <i className="fab fa-instagram"></i>  
                             </a>  
                             <a href="https://web.whatsapp.com/" aria-label="WhatsApp"   
-                               style={socialIconStyle}   
-                               onMouseOver={e => e.currentTarget.style.color = socialIconHoverStyle.color}   
-                               onMouseOut={e => e.currentTarget.style.color = socialIconStyle.color}>  
+                            style={socialIconStyle}   
+                            onMouseOver={e => e.currentTarget.style.color = socialIconHoverStyle.color}   
+                            onMouseOut={e => e.currentTarget.style.color = socialIconStyle.color}>  
                                 <i className="fab fa-whatsapp"></i>  
                             </a>  
                         </div>  

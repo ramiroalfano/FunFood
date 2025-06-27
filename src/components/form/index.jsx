@@ -1,12 +1,34 @@
-import React, { useState } from 'react';
-import { ref, push, set } from 'firebase/database';
+import React, { useState, useEffect } from 'react';
+import { ref, push, set, onValue } from 'firebase/database';
 import { db } from '../../firebase-config';
-import { auth, database, firestoreDb } from '../firebase/FirebaseConfig';
+import { auth, database } from '../firebase/FirebaseConfig';
 import './style.css';
 
 const Form = () => {
   const [forms, setForms] = useState([{ id: 1 }]);
   const [submitStatus, setSubmitStatus] = useState({ loading: false, error: null, success: false });
+  const [previousForms, setPreviousForms] = useState([]);
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      const formsRef = ref(database, 'forms');
+      const unsubscribe = onValue(formsRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const formsList = Object.entries(data)
+            .filter(([_, form]) => form.userId === user.uid)
+            .map(([id, form]) => ({
+              id,
+              ...form
+            }));
+          setPreviousForms(formsList);
+        }
+      });
+
+      return () => unsubscribe();
+    }
+  }, []);
 
   const addForm = () => {
     setForms([...forms, { id: forms.length + 1 }]);
@@ -90,6 +112,27 @@ const Form = () => {
       {submitStatus.success && (
         <div className="alert alert-success" role="alert">
           ¡Formulario enviado con éxito!
+        </div>
+      )}
+
+      {previousForms.length > 0 && (
+        <div className="previous-forms">
+          <h2>Formularios Enviados Anteriormente</h2>
+          <div className="forms-grid">
+            {previousForms.map((form) => (
+              <div key={form.id} className="form-card">
+                <h4>Formulario #{form.id}</h4>
+                <div className="form-details">
+                  <p><strong>Nombre:</strong> {form.nombre || 'No especificado'}</p>
+                  <p><strong>Apellido:</strong> {form.apellido || 'No especificado'}</p>
+                  <p><strong>Teléfono:</strong> {form.tel || 'No especificado'}</p>
+                  <p><strong>Curso:</strong> {form.curso || 'No especificado'}</p>
+                  <p><strong>Mensaje:</strong> {form.mensaje || 'No especificado'}</p>
+                  <p><strong>Fecha:</strong> {new Date(form.createdAt).toLocaleString()}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

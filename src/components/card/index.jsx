@@ -28,11 +28,11 @@ const Card = () => {
                 <div className="col-md-4">  
                     <div className="row g-4">  
                         <div className="col-12">  
-                            <Link to="/ShoppingCart"> {/* Enlace a la vista de créditos */}  
+                             {/* Enlace a la vista de créditos */}  
                                 <div className="bento-item" style={{ backgroundImage: `url(${smallImage1})` }}>   
                                     <h2>Compras</h2>  
                                 </div>  
-                            </Link>  
+                          
                         </div>  
                         <div className="col-12">  
                             <Link to="/Form"> {/* Enlace a la vista de datos personales */}  
@@ -45,18 +45,18 @@ const Card = () => {
                 </div>  
                 {/* Medium items */}  
                 <div className="col-md-4">  
-                    <Link to="/CreditsCard"> {/* Enlace a la vista de compras */}  
+                    {/* Enlace a la vista de compras */}  
                         <div className="bento-item" style={{ backgroundImage: `url(${mediumImage1})` }}>   
                             <h2>Mis Créditos</h2>  
                         </div>  
-                    </Link>  
+                    
                 </div>  
                 <div className="col-md-4">  
-                    <Link to="/sporadic-purchases"> {/* Enlace a la vista de compras esporádicas */}  
+                     {/* Enlace a la vista de compras esporádicas */}  
                         <div className="bento-item" style={{ backgroundImage: `url(${mediumImage2})` }}>   
                             <h2>Compras Esporádicas</h2>  
                         </div>  
-                    </Link>  
+                    
                 </div>  
                 <div className="col-md-4">  
                     <Link to="/Contact"> {/* Enlace a la vista de contacto */}  

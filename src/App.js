@@ -14,6 +14,10 @@ import ProtectedView from './components/ProtectedView';
 import AuthPanel from './components/AuthPanel';
 import AdminPanel from './components/AdminPanel';
 import AdminMenu from './components/AdminMenu';
+import MenuPayment from './components/PayCred/MenuPayment';
+import PaymentSuccess from './components/PayCred/PaymentSuccess';
+import PaymentFailure from './components/PayCred/PaymentFailure';
+import PaymentPending from './components/PayCred/PaymentPending';
 // import Contact from './components/Contact'; // Componente para la vista de contacto  
 
 // Import Firebase auth
@@ -60,6 +64,10 @@ const App = () => {
                     <Route path="/auth" element={<AuthPanel />} />
                     <Route path="/admin" element={<AdminPanel />} />
                     <Route path="/admin-menu" element={<AdminMenu />} />
+                    <Route path="/menu-payment" element={<MenuPayment />} />
+                    <Route path="/success" element={<PaymentSuccess />} />
+                    <Route path="/failure" element={<PaymentFailure />} />
+                    <Route path="/pending" element={<PaymentPending />} />
                 </Routes>  
                 <Footer />  
             </div>  
